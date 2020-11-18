@@ -14,10 +14,6 @@ endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-include_directories(
-    include
-    ${PROJECT_SOURCE_DIR}/3rd/include
-)
 
 set(FACTORY_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/include/factory)
 set(CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR})

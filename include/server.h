@@ -2,9 +2,9 @@
 #define SERVER_H
 
 #include "asio.hpp"
+#include "asio/io_context.hpp"
 #include "session.h"
 #include <cstdint>
-#include "asio/io_context.hpp"
 
 class Server
 {
@@ -16,8 +16,8 @@ private:
     void doAccept();
 
 private:
+    asio::io_context io_context_;
     asio::ip::tcp::acceptor acceptor_;
-    asio::io_service io_service_;
     asio::ip::tcp::endpoint ep_;
     // asio::deadline_timer timer_;
 };
