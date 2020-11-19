@@ -20,7 +20,6 @@ public:
         if (constructors.find(id) != constructors.end())
             return false;
         constructors[id] = constructor;
-        std::cout<<constructors.size()<<std::endl;
     }
 
     void unregisterClass(const std::string &id)
@@ -47,10 +46,16 @@ private:
     std::unordered_map<std::string, std::function<std::shared_ptr<Base>()>> constructors;
 };
 
-extern "C" BasePluginFactory *getPluginFactory()
-{
-    static PluginFactory instance;
-    return &instance;
-}
+// extern "C" BasePluginFactory *getPluginFactory()
+// {
+//     static PluginFactory instance;
+//     return &instance;
+// }
+
+// BasePluginFactory *getPluginFactory()
+// {
+//     static PluginFactory instance;
+//     return &instance;
+// }
 
 #endif

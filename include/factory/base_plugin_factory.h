@@ -25,6 +25,7 @@ protected:
 };
 
 // 整个dll，只需要导出这唯一一个符号，其他所有类都不需要导出
-extern "C" BasePluginFactory *getPluginFactory();
+// extern "C" BasePluginFactory *getPluginFactory();
+BasePluginFactory *getPluginFactory();
 
 #endif
