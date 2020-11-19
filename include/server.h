@@ -3,15 +3,16 @@
 
 #include "asio.hpp"
 #include "asio/io_context.hpp"
+#include "handle_method.h"
 #include "session.h"
 #include <cstdint>
 
-class Server
+class Server : public HandleMethod
 {
 public:
-    Server(std::uint16_t port);
+    Server(const std::uint16_t& port,const std::string& config = "");
     ~Server() = default;
-
+    void start();
 private:
     void doAccept();
 
