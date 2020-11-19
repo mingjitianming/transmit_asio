@@ -3,6 +3,9 @@ project(transport_asio
         LANGUAGES CXX
         VERSION 1.0.0)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_BUILD_TYPE "Debug")
+
 include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag("-std=c++17" COMPILER_SUPPORTS_CXX17)
 if(COMPILER_SUPPORTS_CXX17)
@@ -12,13 +15,13 @@ else()
     message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++17 support. Please use a different C++ compiler.")
 endif()
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 
 
 set(FACTORY_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/include/factory)
 set(CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR})
-set(ASIO_DIR ${CMAKE_CURRENT_LIST_DIR}/3rd/asio/include)
-message(STATUS ${FACTORY_INCLUDE_DIR})
+set(ASIO_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/3rd/asio/include)
+
 
 # add_library(service
 #             src/service.cpp)
@@ -29,4 +32,6 @@ message(STATUS ${FACTORY_INCLUDE_DIR})
 #                 pthread)
 
 add_subdirectory(src)
+add_subdirectory(examples)
+
 

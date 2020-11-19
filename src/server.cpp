@@ -1,14 +1,14 @@
 #include "server.h"
 
-Server::Server(std::uint16_t port)
-    : acceptor_(io_context_, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
+Server::Server(const std::uint16_t &port, const std::string &config)
+    : acceptor_(io_context_, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)),
+      HandleMethod(config)
 {
-    doAccept();
 }
 
 void Server::doAccept()
 {
-    auto session = Session::create(io_context_);
+    auto session = Session::create(io_context_, getMethods());
     acceptor_.async_accept(session->sock(),
                            [this, session](std::error_code ec) {
                                if (!ec)
@@ -17,4 +17,10 @@ void Server::doAccept()
                                }
                                doAccept();
                            });
+}
+
+void Server::start()
+{
+    doAccept();
+    io_context_.run();
 }
