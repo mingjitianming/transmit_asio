@@ -1,3 +1,13 @@
+/**
+ * @file handle_method.h
+ * @author zmy (mingyuzhang@sfmail.sf-express.com)
+ * @brief 
+ * @version 0.1
+ * @date 2020-11-20
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
 #ifndef HANDLE_METHOD_H
 #define HANDLE_METHOD_H
 

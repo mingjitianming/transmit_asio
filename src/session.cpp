@@ -1,3 +1,13 @@
+/**
+ * @file session.cpp
+ * @author zmy (mingyuzhang@sfmail.sf-express.com)
+ * @brief 
+ * @version 0.1
+ * @date 2020-11-20
+ * 
+ * @copyright Copyright (c) 2020
+ * 
+ */
 #include "session.h"
 #include "asio/yield.hpp"
 #include <assert.h>
