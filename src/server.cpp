@@ -1,9 +1,12 @@
 #include "server.h"
+#include <spdlog/spdlog.h>
 
 Server::Server(const std::uint16_t &port, const std::string &config)
     : acceptor_(io_context_, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)),
       HandleMethod(config)
 {
+    // setup logger
+    spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e] %^[%L] %v%$");
 }
 
 void Server::doAccept()

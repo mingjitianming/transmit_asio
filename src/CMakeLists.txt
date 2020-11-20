@@ -8,6 +8,8 @@ target_include_directories(server
             ${FACTORY_INCLUDE_DIR}
             ${ASIO_INCLUDE_DIR}
             ${CMAKE_DIR}/include
+            PRIVATE
+            ${SPDLOG_INCLUDE_DIR}
             )
 
 find_package(yaml-cpp REQUIRED)

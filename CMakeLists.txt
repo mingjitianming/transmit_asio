@@ -21,6 +21,7 @@ endif()
 set(FACTORY_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/include/factory)
 set(CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(ASIO_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/3rd/asio/include)
+set(SPDLOG_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/3rd/spdlog/include)
 
 
 # add_library(service
