@@ -12,11 +12,18 @@ public:
     ~PlcTransmit() = default;
     virtual void parse(Buffer &read_buff, Buffer &write_buff) override;
     virtual void encode(Buffer &write_buff) override;
+    decltype(auto) setPrecessFunction(auto &&func)
+    {
+        handle_plc_ = std::forward<decltype(func)>(func);
+    }
+    // static std::shared_ptr<PlcTransmit> create(std::string plugin_name)
+    // {
+
+    // }
 
 private:
     std::string name_;
-    std::function<void()> handle_plc_;
+    std::function<void(int, int)> handle_plc_ = nullptr;
 };
-
 
 #endif

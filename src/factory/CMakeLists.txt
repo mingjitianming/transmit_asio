@@ -5,5 +5,7 @@ target_include_directories(plugins
             PUBLIC
             ${CMAKE_DIR}/include
             ${FACTORY_INCLUDE_DIR}
+            PRIVATE
+            ${SPDLOG_INCLUDE_DIR}
             )
 message(STATUS ${FACTORY_INCLUDE_DIR})

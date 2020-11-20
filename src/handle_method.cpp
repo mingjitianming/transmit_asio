@@ -1,4 +1,5 @@
 #include "handle_method.h"
+#include <spdlog/spdlog.h>
 
 HandleMethod::HandleMethod(const std::string &config)
     : methods_(std::make_shared<std::map<std::string, std::shared_ptr<Transmit>>>())
@@ -11,5 +12,18 @@ HandleMethod::HandleMethod(const std::string &config)
         std::cout << "methods:" << name << std::endl;
         auto plugin = factory->createInstance<Transmit>(name);
         methods_->emplace(name, std::move(plugin));
+    }
+}
+
+std::shared_ptr<Transmit> HandleMethod::getMethod(const std::string &plugin_name)
+{
+    if (methods_->find(plugin_name) != methods_->end())
+    {
+        return methods_->at(plugin_name);
+    }
+    else
+    {
+        spdlog::warn("has no pulin: {} in methods when get method", plugin_name);
+        return std::shared_ptr<Transmit>(nullptr);
     }
 }
