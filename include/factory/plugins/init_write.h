@@ -14,24 +14,19 @@
 #include "base_plugin.h"
 #include <functional>
 
-class PlcTransmit : public Transmit
+class InitWrite : public Transmit
 {
 public:
-    PlcTransmit() = default;
-    PlcTransmit(std::string plugin_name);
-    ~PlcTransmit() = default;
+    InitWrite() = default;
+    InitWrite(std::string plugin_name);
+    ~InitWrite() = default;
     virtual void parse(Buffer &read_buff, Buffer &write_buff) override;
     virtual void encode(Buffer &write_buff) override;
     decltype(auto) setPrecessFunction(auto &&func)
     {
         handle_plc_ = std::forward<decltype(func)>(func);
     }
-
-    decltype(auto) setEncodeFunction(auto &&func)
-    {
-        handle_write = std::forward<decltype(func)>(func);
-    }
-    // static std::shared_ptr<PlcTransmit> create(std::string plugin_name)
+    // static std::shared_ptr<InitWrite> create(std::string plugin_name)
     // {
 
     // }
@@ -39,7 +34,6 @@ public:
 private:
     std::string name_;
     std::function<void(int, int)> handle_plc_ = nullptr;
-    std::function<void(int, int)> handle_write = nullptr;
 };
 
 #endif

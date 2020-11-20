@@ -12,28 +12,45 @@
 #include <spdlog/spdlog.h>
 
 HandleMethod::HandleMethod(const std::string &config)
-    : methods_(std::make_shared<std::map<std::string, std::shared_ptr<Transmit>>>())
+    : methods_(std::make_shared<std::map<DataHeader, std::shared_ptr<Transmit>>>())
 {
     auto factory = dynamic_cast<PluginFactory *>(getPluginFactory());
     const YAML::Node plugins = YAML::LoadFile(config);
     for (auto it = plugins["plugins"].begin(); it != plugins["plugins"].end(); ++it)
     {
-        auto name = it->second.as<std::string>();
-        std::cout << "methods:" << name << std::endl;
+        auto name = it->first.as<std::string>();
+        spdlog::info("load method:{}", name);
+        auto header = it->second.as<DataHeader>();
         auto plugin = factory->createInstance<Transmit>(name);
-        methods_->emplace(name, std::move(plugin));
+        methods_->emplace(header, std::move(plugin));
+        name2header_.emplace(name, header);
     }
+    if (methods_->size() != name2header_.size())
+        spdlog::error("plugin config is woring");
 }
 
 std::shared_ptr<Transmit> HandleMethod::getMethod(const std::string &plugin_name)
 {
-    if (methods_->find(plugin_name) != methods_->end())
+    if (name2header_.find(plugin_name) != name2header_.end())
     {
-        return methods_->at(plugin_name);
+        return methods_->at(name2header_[plugin_name]);
     }
     else
     {
         spdlog::warn("has no pulin: {} in methods when get method", plugin_name);
+        return std::shared_ptr<Transmit>(nullptr);
+    }
+}
+
+std::shared_ptr<Transmit> HandleMethod::getMethod(const DataHeader &header)
+{
+    if (methods_->find(header) != methods_->end())
+    {
+        return methods_->at(header);
+    }
+    else
+    {
+        spdlog::warn("has no header: {} in methods when get method", header);
         return std::shared_ptr<Transmit>(nullptr);
     }
 }

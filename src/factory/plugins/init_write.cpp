@@ -8,26 +8,27 @@
  * @copyright Copyright (c) 2020
  * 
  */
-#include "plugins/plc_transmist.h"
+#include "plugins/init_write.h"
 #include <iostream>
 #include <memory>
 
-PlcTransmit::PlcTransmit(std::string plugin_name)
+InitWrite::InitWrite(std::string plugin_name)
 {
     PLUGIN_EXPORT(this, plugin_name);
 }
 //  ~PlcTransmis() = default;
 
-void PlcTransmit::parse(Buffer &read_buff, Buffer &write_buff)
+void InitWrite::parse(Buffer &read_buff, Buffer &write_buff)
 {
-    std::cout << "enter parse" << std::endl;
     if (handle_plc_ != nullptr)
     {
+        std::cout << "plc handle function has load" << std::endl;
         handle_plc_(2, 3);
     }
+    std::cout << "enter parse" << std::endl;
 }
-void PlcTransmit::encode(Buffer &write_buff)
+void InitWrite::encode(Buffer &write_buff)
 {
 }
 
-PlcTransmit _PlcTransmit = PlcTransmit("plc");
+// InitWrite _PlcTransmit = InitWrite("init_write");

@@ -10,3 +10,16 @@ target_include_directories(test_server
 
 target_link_libraries(test_server
                     server)
+
+
+add_executable(test_client
+        ${CMAKE_CURRENT_LIST_DIR}/test_client.cpp
+        )
+
+target_include_directories(test_client
+        PUBLIC
+        ${FACTORY_INCLUDE_DIR}
+        )
+
+target_link_libraries(test_client
+                    client)

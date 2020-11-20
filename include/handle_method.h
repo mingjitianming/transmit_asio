@@ -12,19 +12,22 @@
 #define HANDLE_METHOD_H
 
 #include "base_plugin.h"
+#include "type.h"
 #include <map>
 #include <yaml-cpp/yaml.h>
 
-class HandleMethod
+class HandleMethod //: public std::enable_shared_from_this<HandleMethod>
 {
 public:
     HandleMethod(const std::string &config);
     ~HandleMethod() {}
     auto getMethods() { return methods_; }
     std::shared_ptr<Transmit> getMethod(const std::string &plugin_name);
+    std::shared_ptr<Transmit> getMethod(const DataHeader &header);
 
 private:
-    std::shared_ptr<std::map<std::string, std::shared_ptr<Transmit>>> methods_;
+    std::shared_ptr<std::map<DataHeader, std::shared_ptr<Transmit>>> methods_;
+    std::map<std::string, DataHeader> name2header_;
 };
 
 #endif

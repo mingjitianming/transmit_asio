@@ -37,3 +37,12 @@ void Server::start()
     doAccept();
     io_context_.run();
 }
+
+void Server::stop()
+{
+
+    // if (!started_)
+    //     return;
+    // started_ = false;
+    // socket_.close();
+}

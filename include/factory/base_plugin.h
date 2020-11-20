@@ -28,8 +28,8 @@ void PLUGIN_EXPORT(T &&cls, Args &&... args)
 class Transmit : public Base
 {
 public:
-    virtual void parse(Buffer &read_buff, Buffer &write_buff) = 0;
-    virtual void encode(Buffer &write_buff) = 0;
+    virtual void parse(Buffer &read_buff, Buffer &write_buff) {}
+    virtual void encode(Buffer &write_buff) {}
     virtual ~Transmit() = default;
     decltype(auto) dealWithFunction(const auto &&func);
 };
