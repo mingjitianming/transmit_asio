@@ -1,0 +1,12 @@
+include_guard(GLOBAL)
+
+@PACKAGE_INIT@
+
+
+include("${CMAKE_CURRENT_LIST_DIR}/transmitTargets.cmake")
+
+check_required_components(
+    "plugins"
+    "server"
+    "client"
+  )

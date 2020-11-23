@@ -31,7 +31,7 @@ public:
     virtual void parse(Buffer &read_buff, Buffer &write_buff) {}
     virtual void encode(Buffer &write_buff) {}
     virtual ~Transmit() = default;
-    decltype(auto) dealWithFunction(const auto &&func);
+    // decltype(auto) dealWithFunction(const auto &&func);
 };
 
 #endif

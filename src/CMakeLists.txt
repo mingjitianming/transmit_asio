@@ -14,11 +14,19 @@ target_sources(server
 
 target_include_directories(server
             PUBLIC
-            ${FACTORY_INCLUDE_DIR}
-            ${ASIO_INCLUDE_DIR}
-            ${CMAKE_DIR}/include
+            $<BUILD_INTERFACE:${FACTORY_INCLUDE_DIR}>
+            $<BUILD_INTERFACE:${ASIO_INCLUDE_DIR}>
+            $<BUILD_INTERFACE:${CMAKE_DIR}/include>
             PRIVATE
-            ${SPDLOG_INCLUDE_DIR}
+            $<BUILD_INTERFACE:${SPDLOG_INCLUDE_DIR}>
+
+            PUBLIC
+            $<INSTALL_INTERFACE:include/factory>
+            $<INSTALL_INTERFACE:3rd/asio/include>
+            $<INSTALL_INTERFACE:include>
+            PRIVATE
+            $<INSTALL_INTERFACE:3rd/spdlog/include>
+            
             )
 target_link_libraries(server
             plugins
@@ -33,15 +41,29 @@ target_sources(client
             )
 target_include_directories(client
             PUBLIC
-            ${FACTORY_INCLUDE_DIR}
-            ${ASIO_INCLUDE_DIR}
-            ${CMAKE_DIR}/include
+            $<BUILD_INTERFACE:${FACTORY_INCLUDE_DIR}>
+            $<BUILD_INTERFACE:${ASIO_INCLUDE_DIR}>
+            $<BUILD_INTERFACE:${CMAKE_DIR}/include>
             PRIVATE
-            ${SPDLOG_INCLUDE_DIR}
+            $<BUILD_INTERFACE:${SPDLOG_INCLUDE_DIR}>
+
+            PUBLIC
+            $<INSTALL_INTERFACE:include/factory>
+            $<INSTALL_INTERFACE:3rd/asio/include>
+            $<INSTALL_INTERFACE:include>
+            PRIVATE
+            $<INSTALL_INTERFACE:3rd/spdlog/include>
             )
 
 target_link_libraries(client
             plugins
             yaml-cpp
             pthread
+        )
+
+install(TARGETS client server
+        EXPORT ${PROJECT_NAME}Targets
+        LIBRARY DESTINATION ${INSTALL_LIBDIR} COMPONENT lib
+        ARCHIVE DESTINATION ${INSTALL_LIBDIR} COMPONENT lib
+        RUNTIME DESTINATION ${INSTALL_BINDIR} COMPONENT bin
         )
