@@ -21,7 +21,7 @@ namespace transmit
     class Client : public std::enable_shared_from_this<Client>, public HandleMethod, public asio::coroutine
     {
     public:
-        Client(const std::string &config, const std::string &user_name);
+        // Client(const std::string &config, const std::string &user_name);
         ~Client();
         static std::shared_ptr<Client> create(const std::string &config, const std::string &user_name = "");
         void start(const std::string &ip, const int &port);
@@ -29,6 +29,7 @@ namespace transmit
 
     private:
         void step(const asio::error_code &err = asio::error_code(), size_t bytes = 0);
+        Client(const std::string &config, const std::string &user_name);
 
     private:
         std::string user_name_;

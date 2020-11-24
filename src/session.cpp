@@ -75,7 +75,7 @@ namespace transmit
 
     std::shared_ptr<Session> Session::create(asio::io_context &io_context, const std::shared_ptr<std::map<DataHeader, std::shared_ptr<plugins::Transmit>>> &methods)
     {
-        //TODO: 修改为共享
+        //TODO: 添加共享类别
         return std::shared_ptr<Session>(new Session(io_context, methods));
     }
 

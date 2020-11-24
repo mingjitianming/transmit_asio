@@ -29,8 +29,8 @@ namespace transmit
     std::shared_ptr<Client> Client::create(const std::string &config, const std::string &user_name)
     {
         //TODO: 修改为共享
-        // return std::shared_ptr<Client>(new Client(config, user_name));
-        return std::make_shared<Client>(config, user_name);
+        return std::shared_ptr<Client>(new Client(config, user_name));
+        // return std::make_shared<Client>(config, user_name);
     }
 
     void Client::start(const std::string &ip, const int &port)
@@ -104,5 +104,4 @@ namespace transmit
         socket_.close();
     }
 } // namespace transmit
-
 

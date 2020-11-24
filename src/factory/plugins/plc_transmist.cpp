@@ -16,7 +16,7 @@ namespace transmit
 {
     namespace plugins
     {
-        PlcTransmit::PlcTransmit(std::string plugin_name)
+        PlcTransmit::PlcTransmit(std::string plugin_name) : name_(plugin_name)
         {
             PLUGIN_EXPORT(this, plugin_name);
         }
