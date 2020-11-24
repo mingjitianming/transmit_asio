@@ -12,22 +12,28 @@
 #include <iostream>
 #include <memory>
 
-PlcTransmit::PlcTransmit(std::string plugin_name)
+namespace transmit
 {
-    PLUGIN_EXPORT(this, plugin_name);
-}
-//  ~PlcTransmis() = default;
-
-void PlcTransmit::parse(Buffer &read_buff, Buffer &write_buff)
-{
-    std::cout << "enter parse" << std::endl;
-    if (handle_plc_ != nullptr)
+    namespace plugins
     {
-        handle_plc_(2, 3);
-    }
-}
-void PlcTransmit::encode(Buffer &write_buff)
-{
-}
+        PlcTransmit::PlcTransmit(std::string plugin_name)
+        {
+            PLUGIN_EXPORT(this, plugin_name);
+        }
 
-PlcTransmit _PlcTransmit = PlcTransmit("plc");
+        void PlcTransmit::parse(Buffer &read_buff, Buffer &write_buff)
+        {
+            std::cout << "enter parse" << std::endl;
+            if (handle_plc_ != nullptr)
+            {
+                handle_plc_(2, 3, cv::Point2f(1., 2.));
+            }
+            std::string a = "568";
+            std::copy(a.begin(), a.end(), write_buff);
+        }
+        void PlcTransmit::encode(Buffer &write_buff)
+        {
+        }
+        PlcTransmit _PlcTransmit = PlcTransmit("plc");
+    } // namespace plugins
+} // namespace transmit

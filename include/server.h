@@ -18,24 +18,27 @@
 #include "session.h"
 #include <cstdint>
 
-class Server : public HandleMethod
+namespace transmit
 {
-public:
-    Server(const std::uint16_t &port, const std::string &config = "");
-    ~Server() = default;
-    void start();
-    void stop();
+    class Server : public HandleMethod
+    {
+    public:
+        Server(const std::uint16_t &port, const std::string &config = "");
+        ~Server() = default;
+        void start();
+        void stop();
 
-private:
-    void doAccept();
+    private:
+        void doAccept();
 
-private:
-    asio::io_context io_context_;
-    asio::ip::tcp::acceptor acceptor_;
-    asio::ip::tcp::endpoint ep_;
+    private:
+        asio::io_context io_context_;
+        asio::ip::tcp::acceptor acceptor_;
+        asio::ip::tcp::endpoint ep_;
 
-    std::vector<Session> sessions_;
-    // asio::deadline_timer timer_;
-};
+        std::vector<Session> sessions_;
+        // asio::deadline_timer timer_;
+    };
+} // namespace transmit
 
 #endif

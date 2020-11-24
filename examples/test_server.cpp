@@ -11,12 +11,13 @@
 
 #include "plugins/plc_transmist.h"
 #include "server.h"
+#include <opencv2/opencv.hpp>
 
 int main()
 {
     std::string config = "/home/zmy/project_ws/hk_transport/config/plugins.yaml";
-    Server ser(8001, config);
-    std::dynamic_pointer_cast<PlcTransmit>(ser.getMethod("plc"))->setPrecessFunction([](int a, int b) {
+    transmit::Server ser(8001, config);
+    std::dynamic_pointer_cast<transmit::plugins::PlcTransmit>(ser.getMethod("plc"))->setPrecessFunction([](int a, int b, cv::Point2f c) {
         std::cout << a + b << std::endl;
     });
     ser.start();

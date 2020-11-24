@@ -10,8 +10,14 @@
  */
 #include "plugin_factory.h"
 
-BasePluginFactory *getPluginFactory()
+namespace transmit
 {
-    static PluginFactory instance;
-    return &instance;
-}
+    namespace plugins
+    {
+        BasePluginFactory *getPluginFactory()
+        {
+            static PluginFactory instance;
+            return &instance;
+        }
+    } // namespace plugins
+} // namespace transmit

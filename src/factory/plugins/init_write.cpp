@@ -12,23 +12,29 @@
 #include <iostream>
 #include <memory>
 
-InitWrite::InitWrite(std::string plugin_name)
+namespace transmit
 {
-    PLUGIN_EXPORT(this, plugin_name);
-}
-//  ~PlcTransmis() = default;
-
-void InitWrite::parse(Buffer &read_buff, Buffer &write_buff)
-{
-    if (handle_plc_ != nullptr)
+    namespace plugins
     {
-        std::cout << "plc handle function has load" << std::endl;
-        handle_plc_(2, 3);
-    }
-    std::cout << "enter parse" << std::endl;
-}
-void InitWrite::encode(Buffer &write_buff)
-{
-}
+        InitWrite::InitWrite(std::string plugin_name)
+        {
+            PLUGIN_EXPORT(this, plugin_name);
+        }
+        //  ~PlcTransmis() = default;
 
-// InitWrite _PlcTransmit = InitWrite("init_write");
+        void InitWrite::parse(Buffer &read_buff, Buffer &write_buff)
+        {
+            if (handle_plc_ != nullptr)
+            {
+                std::cout << "plc handle function has load" << std::endl;
+                handle_plc_(2, 3);
+            }
+            std::cout << "enter parse" << std::endl;
+        }
+        void InitWrite::encode(Buffer &write_buff)
+        {
+        }
+
+        // InitWrite _PlcTransmit = InitWrite("init_write");
+    } // namespace plugins
+} // namespace transmit

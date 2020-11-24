@@ -11,46 +11,49 @@
 #include "handle_method.h"
 #include <spdlog/spdlog.h>
 
-HandleMethod::HandleMethod(const std::string &config)
-    : methods_(std::make_shared<std::map<DataHeader, std::shared_ptr<Transmit>>>())
+namespace transmit
 {
-    auto factory = dynamic_cast<PluginFactory *>(getPluginFactory());
-    const YAML::Node plugins = YAML::LoadFile(config);
-    for (auto it = plugins["plugins"].begin(); it != plugins["plugins"].end(); ++it)
+    HandleMethod::HandleMethod(const std::string &config)
+        : methods_(std::make_shared<std::map<DataHeader, std::shared_ptr<plugins::Transmit>>>())
     {
-        auto name = it->first.as<std::string>();
-        spdlog::info("load method:{}", name);
-        auto header = it->second.as<DataHeader>();
-        auto plugin = factory->createInstance<Transmit>(name);
-        methods_->emplace(header, std::move(plugin));
-        name2header_.emplace(name, header);
+        auto factory = dynamic_cast<plugins::PluginFactory*>(plugins::getPluginFactory());
+        const YAML::Node plugins = YAML::LoadFile(config);
+        for (auto it = plugins["plugins"].begin(); it != plugins["plugins"].end(); ++it)
+        {
+            auto name = it->first.as<std::string>();
+            spdlog::info("load method:{}", name);
+            auto header = it->second.as<DataHeader>();
+            auto plugin = factory->createInstance<plugins::Transmit>(name);
+            methods_->emplace(header, std::move(plugin));
+            name2header_.emplace(name, header);
+        }
+        if (methods_->size() != name2header_.size())
+            spdlog::error("plugin config is woring");
     }
-    if (methods_->size() != name2header_.size())
-        spdlog::error("plugin config is woring");
-}
 
-std::shared_ptr<Transmit> HandleMethod::getMethod(const std::string &plugin_name)
-{
-    if (name2header_.find(plugin_name) != name2header_.end())
+    std::shared_ptr<plugins::Transmit> HandleMethod::getMethod(const std::string &plugin_name)
     {
-        return methods_->at(name2header_[plugin_name]);
+        if (name2header_.find(plugin_name) != name2header_.end())
+        {
+            return methods_->at(name2header_[plugin_name]);
+        }
+        else
+        {
+            spdlog::warn("has no pulin: {} in methods when get method", plugin_name);
+            return std::shared_ptr<plugins::Transmit>(nullptr);
+        }
     }
-    else
-    {
-        spdlog::warn("has no pulin: {} in methods when get method", plugin_name);
-        return std::shared_ptr<Transmit>(nullptr);
-    }
-}
 
-std::shared_ptr<Transmit> HandleMethod::getMethod(const DataHeader &header)
-{
-    if (methods_->find(header) != methods_->end())
+    std::shared_ptr<plugins::Transmit> HandleMethod::getMethod(const DataHeader &header)
     {
-        return methods_->at(header);
+        if (methods_->find(header) != methods_->end())
+        {
+            return methods_->at(header);
+        }
+        else
+        {
+            spdlog::warn("has no header: {} in methods when get method", header);
+            return std::shared_ptr<plugins::Transmit>(nullptr);
+        }
     }
-    else
-    {
-        spdlog::warn("has no header: {} in methods when get method", header);
-        return std::shared_ptr<Transmit>(nullptr);
-    }
-}
+} // namespace transmit

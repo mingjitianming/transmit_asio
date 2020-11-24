@@ -35,7 +35,7 @@ set(ASIO_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/3rd/asio/include)
 set(SPDLOG_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/3rd/spdlog/include)
 
 add_subdirectory(src)
-# add_subdirectory(examples)
+add_subdirectory(examples)
 
 
 

@@ -13,9 +13,12 @@
 
 #include <array>
 
-constexpr int BUF_SIZE = 1024;
-// using Buffer = std::array<char, BUF_SIZE>;
-using Buffer = char[BUF_SIZE];
-using DataHeader = unsigned int;
+namespace transmit
+{
+    constexpr int BUF_SIZE = 1024;
+    // using Buffer = std::array<char, BUF_SIZE>;
+    using Buffer = char[BUF_SIZE];
+    using DataHeader = unsigned int;
+} // namespace transmit
 
 #endif

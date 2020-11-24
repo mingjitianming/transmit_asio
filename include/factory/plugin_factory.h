@@ -17,55 +17,49 @@
 #include <memory>
 #include <unordered_map>
 
-// 插件工厂实例，此处使用std::string作为类标识，便于使用
-class PluginFactory : public BasePluginFactory
+namespace transmit
 {
-public:
-    PluginFactory() {}
-    virtual ~PluginFactory() = default;
-
-    bool registerClass(const std::string &id,
-                       std::function<std::shared_ptr<Base>()> constructor)
+    namespace plugins
     {
-        if (constructors.find(id) != constructors.end())
-            return false;
-        constructors[id] = constructor;
-    }
+        class PluginFactory : public BasePluginFactory
+        {
+        public:
+            PluginFactory() {}
+            virtual ~PluginFactory() = default;
 
-    void unregisterClass(const std::string &id)
-    {
-        auto it = constructors.find(id);
-        if (it != constructors.end())
-            constructors.erase(it);
-    }
+            bool registerClass(const std::string &id,
+                               std::function<std::shared_ptr<Base>()> constructor)
+            {
+                if (constructors.find(id) != constructors.end())
+                    return false;
+                constructors[id] = constructor;
+            }
 
-protected:
-    virtual std::shared_ptr<Base> createInstanceWithBase(const std::string &id)
-    {
-        auto it = constructors.find(id);
-        if (it == constructors.end())
-            return nullptr;
-        return it->second();
-    }
+            void unregisterClass(const std::string &id)
+            {
+                auto it = constructors.find(id);
+                if (it != constructors.end())
+                    constructors.erase(it);
+            }
 
-private:
-    PluginFactory(const PluginFactory &) = delete;
-    PluginFactory &operator=(const PluginFactory &) = delete;
+        protected:
+            virtual std::shared_ptr<Base> createInstanceWithBase(const std::string &id)
+            {
+                auto it = constructors.find(id);
+                if (it == constructors.end())
+                    return nullptr;
+                return it->second();
+            }
 
-    // 构造各个类实例的工厂函数
-    std::unordered_map<std::string, std::function<std::shared_ptr<Base>()>> constructors;
-};
+        private:
+            PluginFactory(const PluginFactory &) = delete;
+            PluginFactory &operator=(const PluginFactory &) = delete;
 
-// extern "C" BasePluginFactory *getPluginFactory()
-// {
-//     static PluginFactory instance;
-//     return &instance;
-// }
-
-// BasePluginFactory *getPluginFactory()
-// {
-//     static PluginFactory instance;
-//     return &instance;
-// }
+            // 构造各个类实例的工厂函数
+            std::unordered_map<std::string, std::function<std::shared_ptr<Base>()>> constructors;
+        };
+    } // namespace plugins
+} // namespace transmit
+// 插件工厂实例，此处使用std::string作为类标识，便于使用
 
 #endif

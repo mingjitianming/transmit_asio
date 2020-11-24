@@ -16,18 +16,22 @@
 #include <map>
 #include <yaml-cpp/yaml.h>
 
-class HandleMethod //: public std::enable_shared_from_this<HandleMethod>
+namespace transmit
 {
-public:
-    HandleMethod(const std::string &config);
-    ~HandleMethod() {}
-    auto getMethods() { return methods_; }
-    std::shared_ptr<Transmit> getMethod(const std::string &plugin_name);
-    std::shared_ptr<Transmit> getMethod(const DataHeader &header);
+    class HandleMethod //: public std::enable_shared_from_this<HandleMethod>
+    {
+    public:
+        HandleMethod(const std::string &config);
+        ~HandleMethod() {}
+        auto getMethods() { return methods_; }
+        std::shared_ptr<plugins::Transmit> getMethod(const std::string &plugin_name);
+        std::shared_ptr<plugins::Transmit> getMethod(const DataHeader &header);
 
-private:
-    std::shared_ptr<std::map<DataHeader, std::shared_ptr<Transmit>>> methods_;
-    std::map<std::string, DataHeader> name2header_;
-};
+    private:
+        std::shared_ptr<std::map<DataHeader, std::shared_ptr<plugins::Transmit>>> methods_;
+        std::map<std::string, DataHeader> name2header_;
+    };
+}
+
 
 #endif

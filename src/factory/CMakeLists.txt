@@ -1,3 +1,4 @@
+find_package(OpenCV REQUIRED)
 add_library(plugins SHARED
             plugin_factory.cpp
             plugins/plc_transmist.cpp
@@ -17,9 +18,14 @@ target_include_directories(plugins
             )
 message(STATUS ${FACTORY_INCLUDE_DIR})
 
+
+target_link_libraries(plugins
+${OpenCV_LIBRARIES})
+
 install(TARGETS plugins
         EXPORT ${PROJECT_NAME}Targets
         LIBRARY DESTINATION ${INSTALL_LIBDIR} COMPONENT lib
         ARCHIVE DESTINATION ${INSTALL_LIBDIR} COMPONENT lib
         RUNTIME DESTINATION ${INSTALL_BINDIR} COMPONENT bin
         )
+

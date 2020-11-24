@@ -16,28 +16,31 @@
 #ifndef TRANSMIT_CLIENT_H
 #define TRANSMIT_CLIENT_H
 
-class Client : public std::enable_shared_from_this<Client>, public HandleMethod, public asio::coroutine
+namespace transmit
 {
-public:
-    Client(const std::string &config, const std::string &user_name);
-    ~Client();
-    static std::shared_ptr<Client> create(const std::string &config, const std::string &user_name = "");
-    void start(const std::string &ip, const int &port);
-    void stop();
+    class Client : public std::enable_shared_from_this<Client>, public HandleMethod, public asio::coroutine
+    {
+    public:
+        Client(const std::string &config, const std::string &user_name);
+        ~Client();
+        static std::shared_ptr<Client> create(const std::string &config, const std::string &user_name = "");
+        void start(const std::string &ip, const int &port);
+        void stop();
 
-private:
-    void step(const asio::error_code &err = asio::error_code(), size_t bytes = 0);
+    private:
+        void step(const asio::error_code &err = asio::error_code(), size_t bytes = 0);
 
-private:
-    std::string user_name_;
-    bool started_;
-    std::shared_ptr<Transmit> current_method_;
+    private:
+        std::string user_name_;
+        bool started_;
+        std::shared_ptr<plugins::Transmit> current_method_;
 
-    Buffer read_buffer_;
-    Buffer write_buffer_;
-    asio::io_context io_context_;
-    asio::ip::tcp::socket socket_;
-    asio::steady_timer timer_;
-};
+        Buffer read_buffer_;
+        Buffer write_buffer_;
+        asio::io_context io_context_;
+        asio::ip::tcp::socket socket_;
+        asio::steady_timer timer_;
+    };
+} // namespace transmit
 
 #endif

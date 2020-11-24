@@ -13,33 +13,40 @@
 
 #include "base_plugin.h"
 #include <functional>
+#include <opencv2/opencv.hpp>
 
-class PlcTransmit : public Transmit
+namespace transmit
 {
-public:
-    PlcTransmit() = default;
-    PlcTransmit(std::string plugin_name);
-    ~PlcTransmit() = default;
-    virtual void parse(Buffer &read_buff, Buffer &write_buff) override;
-    virtual void encode(Buffer &write_buff) override;
-    decltype(auto) setPrecessFunction(auto &&func)
+    namespace plugins
     {
-        handle_plc_ = std::forward<decltype(func)>(func);
-    }
+        class PlcTransmit : public Transmit
+        {
+        public:
+            PlcTransmit() = default;
+            PlcTransmit(std::string plugin_name);
+            ~PlcTransmit() = default;
+            virtual void parse(Buffer &read_buff, Buffer &write_buff) override;
+            virtual void encode(Buffer &write_buff) override;
+            decltype(auto) setPrecessFunction(auto &&func)
+            {
+                handle_plc_ = std::forward<decltype(func)>(func);
+            }
 
-    decltype(auto) setEncodeFunction(auto &&func)
-    {
-        handle_write = std::forward<decltype(func)>(func);
-    }
-    // static std::shared_ptr<PlcTransmit> create(std::string plugin_name)
-    // {
+            decltype(auto) setEncodeFunction(auto &&func)
+            {
+                handle_write = std::forward<decltype(func)>(func);
+            }
+            // static std::shared_ptr<PlcTransmit> create(std::string plugin_name)
+            // {
 
-    // }
+            // }
 
-private:
-    std::string name_;
-    std::function<void(int, int)> handle_plc_ = nullptr;
-    std::function<void(int, int)> handle_write = nullptr;
-};
+        private:
+            std::string name_;
+            std::function<void(int, int, cv::Point2f)> handle_plc_ = nullptr;
+            std::function<void(int, int)> handle_write = nullptr;
+        };
+    } // namespace plugins
+} // namespace transmit
 
 #endif

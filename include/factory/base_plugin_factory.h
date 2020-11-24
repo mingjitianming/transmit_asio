@@ -13,29 +13,34 @@
 
 #include <memory>
 
-class Base : public std::enable_shared_from_this<Base>
+namespace transmit
 {
-public:
-    virtual ~Base() = default;
-};
-
-// 插件工厂接口
-struct BasePluginFactory
-{
-    virtual ~BasePluginFactory() = default;
-
-    template <typename T>
-    std::shared_ptr<T> createInstance(const std::string id)
+    namespace plugins
     {
-        return std::static_pointer_cast<T>(createInstanceWithBase(id));
-    }
+        class Base : public std::enable_shared_from_this<Base>
+        {
+        public:
+            virtual ~Base() = default;
+        };
 
-protected:
-    virtual std::shared_ptr<Base> createInstanceWithBase(const std::string &id) = 0;
-};
+        // 插件工厂接口
+        struct BasePluginFactory
+        {
+            virtual ~BasePluginFactory() = default;
 
-// 整个dll，只需要导出这唯一一个符号，其他所有类都不需要导出
-// extern "C" BasePluginFactory *getPluginFactory();
-BasePluginFactory *getPluginFactory();
+            template <typename T>
+            std::shared_ptr<T> createInstance(const std::string id)
+            {
+                return std::static_pointer_cast<T>(createInstanceWithBase(id));
+            }
+
+        protected:
+            virtual std::shared_ptr<Base> createInstanceWithBase(const std::string &id) = 0;
+        };
+
+
+        BasePluginFactory *getPluginFactory();
+    } // namespace plugins
+} // namespace transmit
 
 #endif
