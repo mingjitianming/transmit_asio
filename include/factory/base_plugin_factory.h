@@ -23,23 +23,6 @@ namespace transmit
             virtual ~Base() = default;
         };
 
-        // 插件工厂接口
-        struct BasePluginFactory
-        {
-            virtual ~BasePluginFactory() = default;
-
-            template <typename T>
-            std::shared_ptr<T> createInstance(const std::string id)
-            {
-                return std::static_pointer_cast<T>(createInstanceWithBase(id));
-            }
-
-        protected:
-            virtual std::shared_ptr<Base> createInstanceWithBase(const std::string &id) = 0;
-        };
-
-
-        BasePluginFactory *getPluginFactory();
     } // namespace plugins
 } // namespace transmit
 

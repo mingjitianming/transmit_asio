@@ -12,13 +12,23 @@
 #define TRANSMIT_TYPE_H
 
 #include <array>
+#include <functional>
+#include <memory>
 
 namespace transmit
 {
+    namespace plugins
+    {
+        class Base;
+    } // namespace plugins
+
     constexpr int BUF_SIZE = 1024;
     // using Buffer = std::array<char, BUF_SIZE>;
     using Buffer = char[BUF_SIZE];
     using DataHeader = unsigned int;
+
+    using CreateTransmit = std::function<std::shared_ptr<plugins::Base>()>;
+
 } // namespace transmit
 
 #endif

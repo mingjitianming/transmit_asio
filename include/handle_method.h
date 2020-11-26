@@ -18,7 +18,7 @@
 
 namespace transmit
 {
-    class HandleMethod //: public std::enable_shared_from_this<HandleMethod>
+    class HandleMethod
     {
     public:
         HandleMethod(const std::string &config);
@@ -31,7 +31,6 @@ namespace transmit
         std::shared_ptr<std::map<DataHeader, std::shared_ptr<plugins::Transmit>>> methods_;
         std::map<std::string, DataHeader> name2header_;
     };
-}
-
+} // namespace transmit
 
 #endif

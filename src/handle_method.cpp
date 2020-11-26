@@ -16,7 +16,7 @@ namespace transmit
     HandleMethod::HandleMethod(const std::string &config)
         : methods_(std::make_shared<std::map<DataHeader, std::shared_ptr<plugins::Transmit>>>())
     {
-        auto factory = dynamic_cast<plugins::PluginFactory*>(plugins::getPluginFactory());
+        auto factory = plugins::getPluginFactory<CreateTransmit>();
         const YAML::Node plugins = YAML::LoadFile(config);
         for (auto it = plugins["plugins"].begin(); it != plugins["plugins"].end(); ++it)
         {

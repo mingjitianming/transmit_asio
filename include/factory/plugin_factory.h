@@ -11,6 +11,7 @@
 
 #ifndef PLUGINFACTORY_H
 #define PLUGINFACTORY_H
+#include "../type.h"
 #include "base_plugin_factory.h"
 #include <functional>
 #include <iostream>
@@ -21,14 +22,15 @@ namespace transmit
 {
     namespace plugins
     {
-        class PluginFactory : public BasePluginFactory
+        template <typename Object>
+        class PluginFactory
         {
         public:
             PluginFactory() {}
             virtual ~PluginFactory() = default;
 
             bool registerClass(const std::string &id,
-                               std::function<std::shared_ptr<Base>()> constructor)
+                               Object constructor)
             {
                 if (constructors.find(id) != constructors.end())
                     return false;
@@ -42,22 +44,30 @@ namespace transmit
                     constructors.erase(it);
             }
 
-        protected:
-            virtual std::shared_ptr<Base> createInstanceWithBase(const std::string &id)
+            template <typename T, typename... Args>
+            std::shared_ptr<T> createInstance(const std::string &id, Args &&... args)
             {
                 auto it = constructors.find(id);
                 if (it == constructors.end())
                     return nullptr;
-                return it->second();
+                return std::static_pointer_cast<T>(it->second(std::forward<Args>(args)...));
             }
 
+        protected:
         private:
             PluginFactory(const PluginFactory &) = delete;
             PluginFactory &operator=(const PluginFactory &) = delete;
 
             // 构造各个类实例的工厂函数
-            std::unordered_map<std::string, std::function<std::shared_ptr<Base>()>> constructors;
+            std::unordered_map<std::string, Object> constructors;
         };
+
+        template <typename Object>
+        std::shared_ptr<PluginFactory<Object>> getPluginFactory() //;
+        {
+            static std::shared_ptr<PluginFactory<Object>> instance = std::make_shared<PluginFactory<Object>>();
+            return instance;
+        }
     } // namespace plugins
 } // namespace transmit
 // 插件工厂实例，此处使用std::string作为类标识，便于使用
