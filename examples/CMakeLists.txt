@@ -14,14 +14,14 @@ target_link_libraries(test_server
                     ${OpenCV_LIBRARIES})
 
 
-# add_executable(test_client
-#         ${CMAKE_CURRENT_LIST_DIR}/test_client.cpp
-#         )
+add_executable(test_client
+        ${CMAKE_CURRENT_LIST_DIR}/test_client.cpp
+        )
 
-# target_include_directories(test_client
-#         PUBLIC
-#         ${FACTORY_INCLUDE_DIR}
-#         )
+target_include_directories(test_client
+        PUBLIC
+        ${FACTORY_INCLUDE_DIR}
+        )
 
-# target_link_libraries(test_client
-#                     client)
+target_link_libraries(test_client
+                    client)

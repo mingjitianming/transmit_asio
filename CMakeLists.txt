@@ -37,8 +37,13 @@ set(SPDLOG_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/3rd/spdlog/include)
 add_subdirectory(src)
 add_subdirectory(examples)
 
+# create build tree cmake
+export(TARGETS client server plugins
+       NAMESPACE "${PROJECT_NAME}::"
+       FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigBuild.cmake
+       )
 
-
+# create install tree cmake
 install(EXPORT ${PROJECT_NAME}Targets
         NAMESPACE "${PROJECT_NAME}::"
         DESTINATION ${INSTALL_CMAKEDIR}
@@ -68,6 +73,4 @@ install(DIRECTORY
             include 3rd
         DESTINATION .
 )
-    
-
-
+set(CMAKE_BUILD_TYPE)

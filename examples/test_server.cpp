@@ -15,7 +15,7 @@
 
 int main()
 {
-    std::string config = "/home/zmy/project_ws/hk_transport/config/plugins.yaml";
+    std::string config = "/home/zmy/project_ws/hk_transmit/config/plugins.yaml";
     transmit::Server ser(8001, config);
     std::dynamic_pointer_cast<transmit::plugins::PlcTransmit>(ser.getMethod("plc"))->setPrecessFunction([](int a, int b, cv::Point2f c) {
         std::cout << a + b << std::endl;
