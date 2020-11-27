@@ -39,8 +39,7 @@ namespace transmit
             std::string name_;
             std::function<void(int, int)> handle_plc_ = nullptr;
         };
-    }
-}
-       
+    } // namespace plugins
+} // namespace transmit
 
 #endif

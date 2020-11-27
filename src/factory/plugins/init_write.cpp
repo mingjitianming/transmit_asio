@@ -9,16 +9,15 @@
  * 
  */
 #include "plugins/init_write.h"
+#include "export_macro.h"
 #include <iostream>
 #include <memory>
-
 namespace transmit
 {
     namespace plugins
     {
         InitWrite::InitWrite(std::string plugin_name)
         {
-            PLUGIN_EXPORT(this, plugin_name);
         }
         //  ~PlcTransmis() = default;
 
@@ -35,6 +34,6 @@ namespace transmit
         {
         }
 
-        // InitWrite _PlcTransmit = InitWrite("init_write");
+        // PLUGIN_EXPORT(InitWrite, "init_write");
     } // namespace plugins
 } // namespace transmit

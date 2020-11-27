@@ -21,13 +21,13 @@ namespace transmit
 {
     namespace plugins
     {
-        template <typename T, typename... Args>
-        void PLUGIN_EXPORT(T &&cls, Args &&... args)
-        {
-            auto factory = getPluginFactory<CreateTransmit>();
-            factory->registerClass(std::forward<Args>(args)...,
-                                   [args...] { return std::static_pointer_cast<Base>(std::make_shared<decltype(typename std::remove_pointer_t<T>())>(args)...); });
-        }
+        // template <typename T, typename... Args>
+        // void PLUGIN_EXPORT(T &&cls, Args &&... args)
+        // {
+        //     auto factory = getPluginFactory<CreateTransmit>();
+        //     factory->registerClass(std::forward<Args>(args)...,
+        //                            [args...] { return std::static_pointer_cast<Base>(std::make_shared<decltype(typename std::remove_pointer_t<T>())>(args)...); });
+        // }
 
         class Transmit : public Base
         {

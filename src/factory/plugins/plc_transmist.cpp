@@ -9,6 +9,7 @@
  * 
  */
 #include "plugins/plc_transmist.h"
+#include "export_macro.h"
 #include <iostream>
 #include <memory>
 
@@ -18,7 +19,6 @@ namespace transmit
     {
         PlcTransmit::PlcTransmit(std::string plugin_name) : name_(plugin_name)
         {
-            PLUGIN_EXPORT(this, plugin_name);
         }
 
         void PlcTransmit::parse(Buffer &read_buff, Buffer &write_buff)
@@ -34,6 +34,8 @@ namespace transmit
         void PlcTransmit::encode(Buffer &write_buff)
         {
         }
-        PlcTransmit _PlcTransmit = PlcTransmit("plc");
+
+        PLUGIN_EXPORT(PlcTransmit, "plc");
+
     } // namespace plugins
 } // namespace transmit
