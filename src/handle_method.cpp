@@ -24,6 +24,11 @@ namespace transmit
             spdlog::info("load method:{}", name);
             auto header = it->second.as<DataHeader>();
             auto plugin = factory->createInstance<plugins::Transmit>(name);
+            if (plugin == nullptr)
+            {
+                spdlog::error("has no plugin: {}", name);
+                exit(-1);
+            }
             methods_->emplace(header, std::move(plugin));
             name2header_.emplace(name, header);
         }

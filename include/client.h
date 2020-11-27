@@ -30,10 +30,20 @@ namespace transmit
     private:
         void step(const asio::error_code &err = asio::error_code(), size_t bytes = 0);
         Client(const std::string &config, const std::string &user_name);
+        inline bool isRun() { return is_run_; }
+        inline void runContextIO()
+        {
+            if (!is_run_)
+            {
+                is_run_ = true;
+                io_context_.run();
+            }
+        }
 
     private:
         std::string user_name_;
         bool started_;
+        bool is_run_ = false;
         std::shared_ptr<plugins::Transmit> current_method_;
 
         Buffer read_buffer_;

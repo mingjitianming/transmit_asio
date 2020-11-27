@@ -11,6 +11,8 @@
 
 #include "client.h"
 #include "asio/yield.hpp"
+#include <chrono>
+#include <spdlog/spdlog.h>
 
 namespace transmit
 {
@@ -36,16 +38,30 @@ namespace transmit
     void Client::start(const std::string &ip, const int &port)
     {
         asio::ip::tcp::endpoint ep(asio::ip::address::from_string(ip), port);
-        socket_.async_connect(ep, [this, self = shared_from_this()](const asio::error_code &err) {
+        socket_.async_connect(ep, [this, self = shared_from_this(), ip, port](const asio::error_code &err) {
             if (!err)
             {
+                spdlog::info("connected server:\n \t \t \t \tip:{},  port:{}", ip, port);
                 return step(err);
             }
             else
-                stop();
+            {
+                static auto start_time = std::chrono::steady_clock::now();
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                if ((std::chrono::steady_clock::now() - start_time) < std::chrono::seconds(10))
+                    start(ip, port);
+                else
+                {
+                    spdlog::error("The time of connecting to server is out threshold {}s", 10);
+                    stop();
+                    exit(-1);
+                }
+            }
         });
-        io_context_.run();
-    }
+
+        runContextIO();
+
+    } // namespace transmit
 
     void Client::step(const asio::error_code &err, size_t bytes)
     {
@@ -104,4 +120,3 @@ namespace transmit
         socket_.close();
     }
 } // namespace transmit
-
