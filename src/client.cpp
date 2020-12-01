@@ -1,6 +1,6 @@
 /**
  * @file client.cpp
- * @author zmy (mingyuzhang@sfmail.sf-express.com)
+ * @author zmy (626670628@qq.com)
  * @brief cpp
  * @version 0.1
  * @date 2020-11-20
@@ -11,6 +11,7 @@
 
 #include "client.h"
 #include "asio/yield.hpp"
+#include "message.pb.h"
 #include <chrono>
 #include <spdlog/spdlog.h>
 
@@ -18,6 +19,7 @@ namespace transmit
 {
     Client::Client(const std::string &config, const std::string &user_name)
         : HandleMethod(config),
+          user_name_(user_name),
           socket_(io_context_),
           timer_(io_context_),
           current_method_(std::make_shared<plugins::Transmit>())
@@ -73,15 +75,16 @@ namespace transmit
                 if (!started_)
                 {
                     started_ = true;
-                    std::string a = "5";
-                    std::copy(a.begin(), a.end(), write_buffer_);
-                    // out << "login " << username_ << "\n";
+                    message::Message msg;
+                    msg.set_msg_id(getHeader(user_name_));
+                    std::string out = msg.SerializeAsString();
+                    std::copy(out.begin(), out.end(), write_buffer_);
                 }
 
                 yield asio::async_write(socket_, asio::buffer(write_buffer_), [this, self = shared_from_this()](const asio::error_code &err, size_t bytes) {
                     if (!err)
                     {
-                        current_method_->encode(write_buffer_);
+                        // current_method_->encode(write_buffer_);
                         return step(err, bytes);
                     }
                 });
@@ -94,16 +97,19 @@ namespace transmit
                         }
                     });
                 yield io_context_.post([this, self = shared_from_this(), bytes]() {
-                    //TODO:
-
-                    // if (read_buffer_.size() > 0)
                     if (strlen(read_buffer_) > 0)
                     {
                         // std::string header(std::begin(read_buffer_), std::begin(read_buffer_) + header_size_);
-                        DataHeader header = std::stoi(std::string(std::begin(read_buffer_), std::begin(read_buffer_) + 1));
+                        // DataHeader header = std::stoi(std::string(std::begin(read_buffer_), std::begin(read_buffer_) + 1));
+                        std::string read_data = read_buffer_;
+                        message::Message msg;
+                        msg.ParseFromString(read_data);
+                        DataHeader header = msg.msg_id();
                         std::cout << "header:" << header << std::endl;
                         current_method_ = getMethod(header);
-                        current_method_->parse(read_buffer_, write_buffer_);
+                        current_method_->clientHandle(msg);
+                        std::string out = msg.SerializeAsString();
+                        std::copy(out.begin(), out.end(), write_buffer_);
                     }
 
                     return step();

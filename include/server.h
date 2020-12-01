@@ -1,6 +1,6 @@
 /**
  * @file server.h
- * @author zmy (mingyuzhang@sfmail.sf-express.com)
+ * @author zmy (626670628@qq.com)
  * @brief 
  * @version 0.1
  * @date 2020-11-20

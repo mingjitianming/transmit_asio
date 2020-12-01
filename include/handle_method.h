@@ -1,6 +1,6 @@
 /**
  * @file handle_method.h
- * @author zmy (mingyuzhang@sfmail.sf-express.com)
+ * @author zmy (626670628@qq.com)
  * @brief 
  * @version 0.1
  * @date 2020-11-20
@@ -26,6 +26,7 @@ namespace transmit
         auto getMethods() { return methods_; }
         std::shared_ptr<plugins::Transmit> getMethod(const std::string &plugin_name);
         std::shared_ptr<plugins::Transmit> getMethod(const DataHeader &header);
+        DataHeader getHeader(const std::string &name);
 
     private:
         std::shared_ptr<std::map<DataHeader, std::shared_ptr<plugins::Transmit>>> methods_;

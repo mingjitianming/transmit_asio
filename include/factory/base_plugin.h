@@ -1,7 +1,7 @@
 
 /**
  * @file base_plugin.h
- * @author zmy (mingyuzhang@sfmail.sf-express.com)
+ * @author zmy (626670628@qq.com)
  * @brief 
  * @version 0.1
  * @date 2020-11-20
@@ -13,6 +13,7 @@
 #define BASE_PLUGIN_H
 
 #include "../type.h"
+#include "message.pb.h"
 #include "plugin_factory.h"
 #include <memory>
 #include <type_traits>
@@ -32,8 +33,8 @@ namespace transmit
         class Transmit : public Base
         {
         public:
-            virtual void parse(Buffer &read_buff, Buffer &write_buff) {}
-            virtual void encode(Buffer &write_buff) {}
+            virtual void clientHandle(message::Message& message) {}
+            virtual void serverHandle(message::Message &message) {}
             virtual ~Transmit() = default;
             // decltype(auto) dealWithFunction(const auto &&func);
         };

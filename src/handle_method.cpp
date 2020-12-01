@@ -1,6 +1,6 @@
 /**
  * @file handle_method.cpp
- * @author zmy (mingyuzhang@sfmail.sf-express.com)
+ * @author zmy (626670628@qq.com)
  * @brief 
  * @version 0.1
  * @date 2020-11-20
@@ -44,7 +44,7 @@ namespace transmit
         }
         else
         {
-            spdlog::warn("has no pulin: {} in methods when get method", plugin_name);
+            spdlog::error("has no pulin: {} in methods when get method", plugin_name);
             return std::shared_ptr<plugins::Transmit>(nullptr);
         }
     }
@@ -57,8 +57,21 @@ namespace transmit
         }
         else
         {
-            spdlog::warn("has no header: {} in methods when get method", header);
+            spdlog::error("has no header: {} in methods when get method", header);
             return std::shared_ptr<plugins::Transmit>(nullptr);
+        }
+    }
+
+    DataHeader HandleMethod::getHeader(const std::string &name)
+    {
+        if (name2header_.find(name) != name2header_.end())
+        {
+            return name2header_[name];
+        }
+        else
+        {
+            spdlog::error("has no header: {} in methods when get plugin name", name);
+            exit(-1);
         }
     }
 } // namespace transmit

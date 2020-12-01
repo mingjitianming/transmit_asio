@@ -1,6 +1,6 @@
 /**
  * @file session.cpp
- * @author zmy (mingyuzhang@sfmail.sf-express.com)
+ * @author zmy (626670628@qq.com)
  * @brief 
  * @version 0.1
  * @date 2020-11-20
@@ -10,6 +10,7 @@
  */
 #include "session.h"
 #include "asio/yield.hpp"
+#include "message.pb.h"
 #include <functional>
 #include <string>
 
@@ -49,15 +50,17 @@ namespace transmit
                 yield io_context_.post([this, self = shared_from_this(), bytes]() {
                     //TODO:
 
-                    // if (read_buffer_.size() > 0)
                     if (strlen(read_buffer_) > 0)
                     {
-
-                        // std::string header(std::begin(read_buffer_), std::begin(read_buffer_) + header_size_);
-                        DataHeader header = std::stoi(std::string(std::begin(read_buffer_), std::begin(read_buffer_) + 1));
+                        std::string read_data = read_buffer_;
+                        message::Message msg;
+                        msg.ParseFromString(read_data);
+                        DataHeader header = msg.msg_id();
                         std::cout << "header:" << header << std::endl;
                         current_method_ = getMethod(header);
-                        current_method_->parse(read_buffer_, write_buffer_);
+                        current_method_->serverHandle(msg);
+                        std::string out = msg.SerializeAsString();
+                        std::copy(out.begin(), out.end(), write_buffer_);
                     }
 
                     return step();
@@ -65,7 +68,7 @@ namespace transmit
                 yield asio::async_write(socket_, asio::buffer(write_buffer_), [this, self = shared_from_this()](const asio::error_code &err, size_t bytes) {
                     if (!err)
                     {
-                        current_method_->encode(write_buffer_);
+                        // current_method_->encode(write_buffer_);
                         return step(err, bytes);
                     }
                 });

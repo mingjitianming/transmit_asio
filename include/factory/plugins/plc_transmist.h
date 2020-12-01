@@ -1,6 +1,6 @@
 /**
  * @file plc_transmist.h
- * @author zmy (mingyuzhang@sfmail.sf-express.com)
+ * @author zmy (626670628@qq.com)
  * @brief 
  * @version 0.1
  * @date 2020-11-20
@@ -25,16 +25,16 @@ namespace transmit
             PlcTransmit() = default;
             PlcTransmit(std::string plugin_name);
             ~PlcTransmit() = default;
-            virtual void parse(Buffer &read_buff, Buffer &write_buff) override;
-            virtual void encode(Buffer &write_buff) override;
-            decltype(auto) setPrecessFunction(auto &&func)
+            virtual void clientHandle(message::Message &message) override;
+            virtual void serverHandle(message::Message &message) override;
+            decltype(auto) setClientProcess(auto &&func)
             {
                 handle_plc_ = std::forward<decltype(func)>(func);
             }
 
-            decltype(auto) setEncodeFunction(auto &&func)
+            decltype(auto) setServerProcess(auto &&func)
             {
-                handle_write = std::forward<decltype(func)>(func);
+                server_handle_ = std::forward<decltype(func)>(func);
             }
             // static std::shared_ptr<PlcTransmit> create(std::string plugin_name)
             // {
@@ -44,7 +44,7 @@ namespace transmit
         private:
             std::string name_;
             std::function<void(int, int, cv::Point2f)> handle_plc_ = nullptr;
-            std::function<void(int, int)> handle_write = nullptr;
+            std::function<void(int, int, cv::Point2f)> server_handle_ = nullptr;
         };
     } // namespace plugins
 } // namespace transmit

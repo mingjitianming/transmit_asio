@@ -1,0 +1,15 @@
+syntax="proto3";
+
+package message;
+
+import "google/protobuf/any.proto";
+
+message Message
+{
+    sfixed32 msg_head = 1;
+    sint32 msg_id = 2;
+    sint32 src_id = 3;
+    sint32 dest_id = 4;
+    google.protobuf.Any msg_data = 5;
+    sfixed32 msg_tail = 6;
+}

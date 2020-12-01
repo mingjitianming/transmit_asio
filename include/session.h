@@ -1,6 +1,6 @@
 /**
  * @file session.h
- * @author zmy (mingyuzhang@sfmail.sf-express.com)
+ * @author zmy (626670628@qq.com)
  * @brief 
  * @version 0.1
  * @date 2020-11-20
@@ -36,8 +36,6 @@ namespace transmit
     private:
         asio::ip::tcp::socket socket_;
         asio::io_context &io_context_;
-        // std::array<char, BUF_SIZE> read_buffer_;
-        // std::array<char, BUF_SIZE> write_buffer_;
         Buffer read_buffer_;
         Buffer write_buffer_;
         // asio::streambuf buf_;
