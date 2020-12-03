@@ -28,6 +28,7 @@ namespace transmit
                                [this, session](std::error_code ec) {
                                    if (!ec)
                                    {
+                                       spdlog::info("connected client");
                                        session->start();
                                    }
                                    doAccept();
@@ -50,5 +51,4 @@ namespace transmit
     }
 
 } // namespace transmit
-
 

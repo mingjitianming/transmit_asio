@@ -74,6 +74,7 @@ namespace transmit
                 data.mutable_response()->set_y(2);
                 data.mutable_response()->set_theta(1);
                 message.mutable_msg_data()->PackFrom(data);
+                std::cout << "pack data" << std::endl;
             }
         }
 
