@@ -77,10 +77,11 @@ namespace transmit
                 if (!started_)
                 {
                     started_ = true;
+                    //TODO: 从yaml文件传递需要的多个message配置
                     message::Message msg;
-                    // msg.set_msg_id(getHeader(user_name_));
-                    // msg.set_src_id(10);
-                    // msg.set_dest_id(20);
+                    msg.set_msg_id(getHeader(user_name_));
+                    msg.set_src_id(10);
+                    msg.set_dest_id(20);
                     std::string out = msg.SerializeAsString();
                     std::copy(out.begin(), out.end(), write_buffer_);
                 }
