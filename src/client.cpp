@@ -24,6 +24,8 @@ namespace transmit
           timer_(io_context_),
           current_method_(std::make_shared<plugins::Transmit>())
     {
+        memset(read_buffer_, '\0', sizeof(read_buffer_));
+        memset(write_buffer_, '\0', sizeof(write_buffer_));
     }
 
     Client::~Client()
@@ -76,44 +78,47 @@ namespace transmit
                 {
                     started_ = true;
                     message::Message msg;
-                    msg.set_msg_id(getHeader(user_name_));
+                    // msg.set_msg_id(getHeader(user_name_));
+                    // msg.set_src_id(10);
+                    // msg.set_dest_id(20);
                     std::string out = msg.SerializeAsString();
                     std::copy(out.begin(), out.end(), write_buffer_);
                 }
 
-                yield asio::async_write(socket_, asio::buffer(write_buffer_), [this, self = shared_from_this()](const asio::error_code &err, size_t bytes) {
-                    if (!err)
-                    {
-                        // current_method_->encode(write_buffer_);
-                        return step(err, bytes);
-                    }
-                });
+                yield if (strlen(write_buffer_) > 0)
+                {
+                    asio::async_write(socket_, asio::buffer(write_buffer_), [this, self = shared_from_this()](const asio::error_code &err, size_t bytes) {
+                        if (!err)
+                        {
+                            memset(write_buffer_, '\0', sizeof(write_buffer_));
+                            return step(err, bytes);
+                        }
+                    });
+                }
+                else
+                {
+                    return step();
+                }
 
                 yield socket_.async_read_some(
                     asio::buffer(read_buffer_), [this, self = shared_from_this()](const asio::error_code &err, size_t bytes) {
                         if (!err)
                         {
+                            if (strlen(read_buffer_) > 0)
+                            {
+                                message::Message msg;
+                                msg.ParseFromString(read_buffer_);
+                                DataHeader header = msg.msg_id();
+                                std::cout << "header:" << header << std::endl;
+                                current_method_ = getMethod(header);
+                                current_method_->clientHandle(msg);
+                                std::string out = msg.SerializeAsString();
+                                std::copy(out.begin(), out.end(), write_buffer_);
+                            }
+                            memset(read_buffer_, '\0', sizeof(read_buffer_));
                             return step(err, bytes);
                         }
                     });
-                yield io_context_.post([this, self = shared_from_this(), bytes]() {
-                    if (strlen(read_buffer_) > 0)
-                    {
-                        // std::string header(std::begin(read_buffer_), std::begin(read_buffer_) + header_size_);
-                        // DataHeader header = std::stoi(std::string(std::begin(read_buffer_), std::begin(read_buffer_) + 1));
-                        std::string read_data = read_buffer_;
-                        message::Message msg;
-                        msg.ParseFromString(read_data);
-                        DataHeader header = msg.msg_id();
-                        std::cout << "header:" << header << std::endl;
-                        current_method_ = getMethod(header);
-                        current_method_->clientHandle(msg);
-                        std::string out = msg.SerializeAsString();
-                        std::copy(out.begin(), out.end(), write_buffer_);
-                    }
-
-                    return step();
-                });
             }
         }
     }
@@ -124,5 +129,21 @@ namespace transmit
             return;
         started_ = false;
         socket_.close();
+    }
+
+    void Client::sendMsg(const auto &data)
+    {
+        message::Message msg;
+        // msg.set_msg_id(getHeader(user_name_));
+        msg.mutable_msg_data()->PackFrom(&data);
+        std::string out = msg.SerializeAsString();
+        char buffer[out.size()];
+        std::copy(out.begin(), out.end(), buffer);
+        asio::async_write(socket_, asio::buffer(buffer), [this, self = shared_from_this()](const asio::error_code &err, size_t bytes) {
+            if (err)
+            {
+                spdlog::error("send message failed!");
+            }
+        });
     }
 } // namespace transmit

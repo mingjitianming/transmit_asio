@@ -26,6 +26,7 @@ namespace transmit
         static std::shared_ptr<Client> create(const std::string &config, const std::string &user_name = "");
         void start(const std::string &ip, const int &port);
         void stop();
+        void sendMsg(const auto &data);
 
     private:
         void step(const asio::error_code &err = asio::error_code(), size_t bytes = 0);

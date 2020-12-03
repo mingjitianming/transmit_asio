@@ -21,6 +21,8 @@ namespace transmit
           io_context_(io_context),
           methods_(methods)
     {
+        memset(read_buffer_, '\0', sizeof(read_buffer_));
+        memset(write_buffer_, '\0', sizeof(write_buffer_));
     }
 
     void Session::start()
@@ -44,34 +46,39 @@ namespace transmit
                     asio::buffer(read_buffer_), [this, self = shared_from_this()](const asio::error_code &err, size_t bytes) {
                         if (!err)
                         {
+                            if (strlen(read_buffer_) > 0)
+                            {
+
+                                message::Message msg;
+                                msg.ParseFromString(read_buffer_);
+                                DataHeader header = msg.msg_id();
+                                std::cout << "header:" << header << std::endl;
+                                std::cout << msg.src_id() << " " << msg.dest_id() << std::endl;
+                                current_method_ = getMethod(header);
+                                current_method_->serverHandle(msg);
+                                std::string out = msg.SerializeAsString();
+                                std::copy(out.begin(), out.end(), write_buffer_);
+                            }
+                            memset(read_buffer_, '\0', sizeof(read_buffer_));
                             return step(err, bytes);
                         }
                     });
-                yield io_context_.post([this, self = shared_from_this(), bytes]() {
-                    //TODO:
 
-                    if (strlen(read_buffer_) > 0)
-                    {
-                        std::string read_data = read_buffer_;
-                        message::Message msg;
-                        msg.ParseFromString(read_data);
-                        DataHeader header = msg.msg_id();
-                        std::cout << "header:" << header << std::endl;
-                        current_method_ = getMethod(header);
-                        current_method_->serverHandle(msg);
-                        std::string out = msg.SerializeAsString();
-                        std::copy(out.begin(), out.end(), write_buffer_);
-                    }
-
+                yield if (strlen(write_buffer_) > 0)
+                {
+                    asio::async_write(socket_, asio::buffer(write_buffer_), [this, self = shared_from_this()](const asio::error_code &err, size_t bytes) {
+                        if (!err)
+                        {
+                            // current_method_->encode(write_buffer_);
+                            memset(write_buffer_, '\0', sizeof(write_buffer_));
+                            return step(err, bytes);
+                        }
+                    });
+                }
+                else
+                {
                     return step();
-                });
-                yield asio::async_write(socket_, asio::buffer(write_buffer_), [this, self = shared_from_this()](const asio::error_code &err, size_t bytes) {
-                    if (!err)
-                    {
-                        // current_method_->encode(write_buffer_);
-                        return step(err, bytes);
-                    }
-                });
+                }
             }
         }
     }
