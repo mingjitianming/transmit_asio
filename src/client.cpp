@@ -39,7 +39,7 @@ namespace transmit
         // return std::make_shared<Client>(config, user_name);
     }
 
-    void Client::start(const std::string &ip, const int &port)
+    void Client::start(const std::string &ip, const int &port,const bool blocked)
     {
         asio::ip::tcp::endpoint ep(asio::ip::address::from_string(ip), port);
         socket_.async_connect(ep, [this, self = shared_from_this(), ip, port](const asio::error_code &err) {
@@ -63,7 +63,7 @@ namespace transmit
             }
         });
 
-        runContextIO();
+        runContextIO(blocked);
 
     } // namespace transmit
 
@@ -132,19 +132,4 @@ namespace transmit
         socket_.close();
     }
 
-    void Client::sendMsg(const auto &data)
-    {
-        message::Message msg;
-        // msg.set_msg_id(getHeader(user_name_));
-        msg.mutable_msg_data()->PackFrom(&data);
-        std::string out = msg.SerializeAsString();
-        char buffer[out.size()];
-        std::copy(out.begin(), out.end(), buffer);
-        asio::async_write(socket_, asio::buffer(buffer), [this, self = shared_from_this()](const asio::error_code &err, size_t bytes) {
-            if (err)
-            {
-                spdlog::error("send message failed!");
-            }
-        });
-    }
 } // namespace transmit
