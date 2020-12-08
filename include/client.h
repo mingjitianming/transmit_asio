@@ -12,6 +12,7 @@
 #include "asio.hpp"
 #include "asio/steady_timer.hpp"
 #include "handle_method.h"
+#include "message.pb.h"
 #include <future>
 
 #ifndef TRANSMIT_CLIENT_H

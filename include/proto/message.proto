@@ -4,6 +4,11 @@ package message;
 
 import "google/protobuf/any.proto";
 
+message LogInfo
+{
+    string name = 1;
+}
+
 message Message
 {
     sfixed32 msg_head = 1;

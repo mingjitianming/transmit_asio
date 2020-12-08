@@ -11,7 +11,6 @@
 
 #include "client.h"
 #include "asio/yield.hpp"
-#include "message.pb.h"
 #include <chrono>
 #include <spdlog/spdlog.h>
 
@@ -39,7 +38,7 @@ namespace transmit
         // return std::make_shared<Client>(config, user_name);
     }
 
-    void Client::start(const std::string &ip, const int &port,const bool blocked)
+    void Client::start(const std::string &ip, const int &port, const bool blocked)
     {
         asio::ip::tcp::endpoint ep(asio::ip::address::from_string(ip), port);
         socket_.async_connect(ep, [this, self = shared_from_this(), ip, port](const asio::error_code &err) {
@@ -82,6 +81,9 @@ namespace transmit
                     msg.set_msg_id(getHeader(user_name_));
                     msg.set_src_id(10);
                     msg.set_dest_id(20);
+                    message::LogInfo log_info;
+                    log_info.set_name(user_name_);
+                    msg.mutable_msg_data()->PackFrom(log_info);
                     std::string out = msg.SerializeAsString();
                     std::copy(out.begin(), out.end(), write_buffer_);
                 }

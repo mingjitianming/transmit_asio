@@ -22,6 +22,6 @@ int main()
     data.mutable_response()->set_x(5);
     data.mutable_response()->set_y(6);
     client->sendMsg(data);
-    std::cout << "lllllllllllllllllll" << std::endl;
+    std::cout << "end node" << std::endl;
     return 0;
 }
