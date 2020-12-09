@@ -78,7 +78,7 @@ namespace transmit
                     started_ = true;
                     //TODO: 从yaml文件传递需要的多个message配置
                     message::Message msg;
-                    msg.set_msg_id(getHeader(user_name_));
+                    msg.set_msg_id(6);
                     msg.set_src_id(10);
                     msg.set_dest_id(20);
                     message::LogInfo log_info;

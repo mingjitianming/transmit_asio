@@ -63,7 +63,7 @@ namespace transmit
     void Client::sendMsg(const auto &data)
     {
         message::Message msg;
-        msg.set_msg_id(getHeader(user_name_));
+        msg.set_msg_id(5);
         msg.mutable_msg_data()->PackFrom(data);
         std::string out = msg.SerializeAsString();
         char buffer[1024];

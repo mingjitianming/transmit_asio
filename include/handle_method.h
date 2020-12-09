@@ -23,14 +23,14 @@ namespace transmit
     public:
         HandleMethod(const std::string &config);
         ~HandleMethod() {}
-        auto getMethods() { return methods_; }
+        auto getMethods() { return msg_id2method_; }
         std::shared_ptr<plugins::Transmit> getMethod(const std::string &plugin_name);
         std::shared_ptr<plugins::Transmit> getMethod(const DataHeader &header);
         DataHeader getHeader(const std::string &name);
 
     private:
-        std::shared_ptr<std::map<DataHeader, std::shared_ptr<plugins::Transmit>>> methods_;
-        std::map<std::string, DataHeader> name2header_;
+        std::shared_ptr<std::map<std::string, std::shared_ptr<plugins::Transmit>>> methods_;
+        std::shared_ptr<std::map<DataHeader, std::shared_ptr<plugins::Transmit>>> msg_id2method_;
     };
 } // namespace transmit
 

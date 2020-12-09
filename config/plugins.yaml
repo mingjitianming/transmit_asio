@@ -1,2 +1,3 @@
 plugins:
-  plc: 5
+  - { name: plc, msg_id: 5 }
+  - { name: plc, msg_id: 6 }
