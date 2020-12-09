@@ -6,7 +6,7 @@
 int main()
 {
 
-    std::string config = "/home/zmy/project_ws/hk_transmit/config/plugins.yaml";
+    std::string config = "/home/zmy/project_ws/my_hk_transmit/config/plugins.yaml";
     std::string ip("127.0.0.1");
 
     auto client = transmit::Client::create(config, "plc");

@@ -4,7 +4,7 @@
 
 int main()
 {
-    std::string config = "/home/zmy/project_ws/hk_transport/config/plugins.yaml";
+    std::string config = "/home/zmy/project_ws/my_hk_transmit/config/plugins.yaml";
     std::string ip("127.0.0.1");
 
     std::shared_ptr<Client> client = Client::create(config, "zmy");
