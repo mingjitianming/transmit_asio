@@ -25,7 +25,7 @@ namespace transmit
         void handler(const asio::error_code &err, size_t bytes);
 
         inline auto &sock() { return socket_; }
-
+        void sendMsg(const auto &data);
         static std::shared_ptr<Session> create(asio::io_context &io_context, const std::shared_ptr<std::map<DataHeader, std::shared_ptr<plugins::Transmit>>> &methods);
 
     private:
@@ -38,12 +38,28 @@ namespace transmit
         asio::io_context &io_context_;
         Buffer read_buffer_;
         Buffer write_buffer_;
-        // asio::streambuf buf_;
 
-        uint header_size_ = 3;
+
         std::shared_ptr<plugins::Transmit> current_method_;
         std::shared_ptr<std::map<DataHeader, std::shared_ptr<plugins::Transmit>>> methods_;
     };
+
+    void Session::sendMsg(const auto &data)
+    {
+        message::Message msg;
+        msg.set_msg_id(5);
+        msg.mutable_msg_data()->PackFrom(data);
+        std::string out = msg.SerializeAsString();
+        char buffer[1024];
+        memset(buffer, '\0', sizeof(buffer));
+        std::copy(out.begin(), out.end(), buffer);
+        asio::async_write(socket_, asio::buffer(buffer), [this, self = shared_from_this()](const asio::error_code &err, size_t bytes) {
+            if (err)
+            {
+                // spdlog::error("send message failed!");
+            }
+        });
+    }
 } // namespace transmit
 
 #endif

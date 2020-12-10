@@ -34,10 +34,10 @@ namespace transmit
                                });
     }
 
-    void Server::start()
+    void Server::start(const bool blocked)
     {
         doAccept();
-        io_context_.run();
+        runContextIO(blocked);
     }
 
     void Server::stop()
