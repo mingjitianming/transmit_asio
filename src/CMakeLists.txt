@@ -4,7 +4,7 @@ add_library(client SHARED "")
 find_package(yaml-cpp REQUIRED)
 find_package(Protobuf 3 REQUIRED)
 
-set(PROTO_MESSAGE_DIR)
+set(PROTO_MESSAGE_DIR "")
 file(GLOB_RECURSE MSG_PROTOS ${CMAKE_SOURCE_DIR}/include/proto/*.proto)
 foreach(file ${MSG_PROTOS})
         protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS DESCRIPTORS PROTO_DESCS ${file})
