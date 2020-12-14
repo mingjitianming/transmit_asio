@@ -4,8 +4,15 @@ add_library(client SHARED "")
 find_package(yaml-cpp REQUIRED)
 find_package(Protobuf 3 REQUIRED)
 
+# SET(PROTO_META_BASE_DIR ${CMAKE_CURRENT_BINARY_DIR})
+# LIST(APPEND PROTO_FLAGS -I${CMAKE_CURRENT_SOURCE_DIR})
+# EXECUTE_PROCESS(
+#             COMMAND ${PROTOBUF_PROTOC_EXECUTABLE} ${PROTO_FLAGS} --cpp_out=${PROTO_META_BASE_DIR} ${FIL}
+#     )
+
 set(PROTO_MESSAGE_DIR "")
-file(GLOB_RECURSE MSG_PROTOS ${CMAKE_SOURCE_DIR}/include/proto/*.proto)
+# file(GLOB_RECURSE MSG_PROTOS ${CMAKE_SOURCE_DIR}/include/proto/*.proto)
+file(GLOB_RECURSE MSG_PROTOS ${CMAKE_SOURCE_DIR}/msg/message/*.proto)
 foreach(file ${MSG_PROTOS})
         protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS DESCRIPTORS PROTO_DESCS ${file})
         get_filename_component(dir ${PROTO_HDRS} DIRECTORY)
@@ -13,7 +20,7 @@ foreach(file ${MSG_PROTOS})
 
 endforeach()
 
-add_subdirectory(factory)
+add_subdirectory(${CMAKE_SOURCE_DIR}/plugins ${CMAKE_BINARY_DIR}/plugins)
 
 target_sources(server
             PRIVATE
