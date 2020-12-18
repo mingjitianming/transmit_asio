@@ -73,4 +73,3 @@ install(DIRECTORY
             include 3rd
         DESTINATION .
 )
-set(CMAKE_BUILD_TYPE)
