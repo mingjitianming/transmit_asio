@@ -13,6 +13,7 @@
 #include "asio.hpp"
 #include "handle_method.h"
 #include "type.h"
+// #include <atomic>
 #include <map>
 #include <utility>
 
@@ -39,7 +40,7 @@ namespace transmit
         Buffer read_buffer_;
         Buffer write_buffer_;
 
-
+        // std::atomic<std::shared_ptr<plugins::Transmit>> current_method_;
         std::shared_ptr<plugins::Transmit> current_method_;
         std::shared_ptr<std::map<DataHeader, std::shared_ptr<plugins::Transmit>>> methods_;
     };

@@ -54,8 +54,11 @@ namespace transmit
                                 DataHeader header = msg.msg_id();
                                 std::cout << "header:" << header << std::endl;
                                 std::cout << msg.src_id() << " " << msg.dest_id() << std::endl;
+                                //XXX:是否要加lock
                                 current_method_ = getMethod(header);
                                 current_method_->serverHandle(msg);
+                                // current_method_.store(getMethod(header));
+                                // current_method_.load()->serverHandle(msg);
                                 std::string out = msg.SerializeAsString();
                                 std::copy(out.begin(), out.end(), write_buffer_);
                             }

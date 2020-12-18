@@ -113,6 +113,7 @@ namespace transmit
                                 msg.ParseFromString(read_buffer_);
                                 DataHeader header = msg.msg_id();
                                 std::cout << "header:" << header << std::endl;
+                                //XXX:是否要加lock
                                 current_method_ = getMethod(header);
                                 current_method_->clientHandle(msg);
                                 std::string out = msg.SerializeAsString();
